@@ -1,17 +1,18 @@
 import streamlit as st
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-import sklearn
 import os
 import re
 import requests
 import joblib
+import pymorphy3
+from time import time
+from sklearn.base import BaseEstimator, TransformerMixin
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import sklearn
+from collections import defaultdict
 import string
 import zipfile
-import pymorphy3
-from collections import defaultdict
-from time import time
 from umap import UMAP
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
@@ -27,7 +28,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import Normalizer
-from sklearn.base import BaseEstimator, TransformerMixin
+
 from sklearn.pipeline import Pipeline
 
 
@@ -95,21 +96,23 @@ class MyCustomTextPreprocessor(BaseEstimator, TransformerMixin):
         return text
 
 
-
 # Загружаем предобученную модель
 current_dir = os.path.dirname(os.path.abspath(__file__))
 # model_file_path = os.path.join(current_dir, '../models/text_classification_pipeline.pkl')
 model_file_path = os.path.join(current_dir, '../models/tfidf_text_classification_pipeline.pkl')
 loaded_pipeline = joblib.load(model_file_path)
 
-
 st.title("Классификация отзывов о фильмах по шкале Good-Neutral-Bad")
-new_text = st.text_input("Введите свой отзыв для классификации")
-st.text("Примеры текста для ввода:\n"
-        "[Good] Никогда на душе у меня не было так спокойно, как в этот раз. Этот потрясающий фильм просто вознес мою душу "
-        "на недостижимые высоты и там пребывала она в блаженстве, аки у Христа за пазухой.\n"
-        "[Bad] Что за дебильный фильм? Кто вообще такое смотрит и кто вообще такое снимает? Это же просто позор!!!\n"
-        "[Neutral] Ни че так фильмец) Смотреть можно. Бывает и лучше, но мы на чили чисто посмотрели")
+new_text = st.text_input("Введите свой отзыв для классификации:")
+
+with st.sidebar:
+    st.subheader('Примеры текста для ввода:')
+    st.text('[Good]')
+    st.write('Фильм впечатлил своей глубиной и неожиданными сюжетными поворотами. Актерская игра на высоте — каждый персонаж показан с такой искренностью, что легко забыть, что это всего лишь кино. Визуальные эффекты потрясают, а саундтрек идеально дополняет атмосферу. Режиссер умело сочетает драму, экшен и моменты комедии, создавая цельное произведение искусства. Этот фильм оставил неизгладимое впечатление, заставил задуматься и даже пересмотреть некоторые жизненные приоритеты. Определенно рекомендую к просмотру, особенно тем, кто любит фильмы с глубоким смыслом и харизматичными героями.')
+    st.text('[Neutral]')
+    st.write('Фильм оказался неплохим, но не произвел сильного впечатления. Сюжет в целом интересный, хотя местами предсказуемый. Актеры сыграли достойно, но не скажу, что кто-то особо выделился. Визуальные эффекты и музыка были на уровне, но не вызвали вау-эффекта. Временами динамика фильма казалась затянутой, и это немного снижало общее впечатление. В целом, картина подойдет для вечернего просмотра, но не думаю, что она останется в памяти надолго. Неплохой фильм, но ничего выдающегося в нем я не нашел.')
+    st.text('[Bad]')
+    st.write('Фильм разочаровал по всем фронтам. Сюжет оказался банальным и скучным, а развитие событий — предсказуемым. Актерская игра оставляет желать лучшего — персонажи получились плоскими и невыразительными. Визуальные эффекты и саундтрек тоже не спасли ситуацию — все выглядело дешево и неумело. Фильм явно тянули по времени, добавляя ненужные сцены и затягивая простые моменты. В итоге я просто потерял время, ожидая, что что-то изменится, но, увы, этого не произошло. Определенно не рекомендую к просмотру.')
 
 if new_text:
     # Определяем класс и измеряем время предсказания

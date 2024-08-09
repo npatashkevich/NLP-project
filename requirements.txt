@@ -9,3 +9,4 @@ pymorphy3
 scikit-learn
 umap-learn
 nltk
+requests
