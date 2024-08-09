@@ -4,3 +4,8 @@ torch
 torchvision 
 matplotlib
 opencv-python
+joblib
+pymorphy3
+scikit-learn
+umap-learn
+nltk

@@ -28,6 +28,7 @@ st.write(
     "For each model, you'll see the prediction results along with the time taken for inference. Additionally, "
     "a comparative table displaying the f1-macro metric for all classifiers is provided."
 )
+st.page_link('pages/page1.py', label='Модель tfidf by DmChe', icon='👀')
 
 st.subheader('2. Toxicity Detection of User Messages')
 st.write(
