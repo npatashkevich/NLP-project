@@ -2,9 +2,16 @@ import streamlit as st
 import torch
 from transformers import BertTokenizer, BertForSequenceClassification
 
-# Загрузка модели и токенизатора
-tokenizer = BertTokenizer.from_pretrained("cointegrated/rubert-tiny-toxicity")
-model = BertForSequenceClassification.from_pretrained("cointegrated/rubert-tiny-toxicity")
+# Путь к директории, где сохранена обученная модель
+model_directory = './models'
+
+# Загрузка модели и токенизатора из указанной директории
+tokenizer = BertTokenizer.from_pretrained(model_directory)
+model = BertForSequenceClassification.from_pretrained(model_directory)
+
+# # Загрузка модели и токенизатора
+# tokenizer = BertTokenizer.from_pretrained("cointegrated/rubert-tiny-toxicity")
+# model = BertForSequenceClassification.from_pretrained("cointegrated/rubert-tiny-toxicity")
 
 # Перевод модели в режим оценки
 model.eval()
