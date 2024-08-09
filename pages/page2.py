@@ -3,7 +3,7 @@ import torch
 from transformers import BertTokenizer, BertForSequenceClassification
 
 # Путь к директории, где сохранена обученная модель
-model_directory = './models'
+model_directory = './models/model_n'
 
 # Загрузка модели и токенизатора из указанной директории
 tokenizer = BertTokenizer.from_pretrained(model_directory)
