@@ -99,8 +99,12 @@ class MyCustomTextPreprocessor(BaseEstimator, TransformerMixin):
 # Загружаем предобученную модель
 current_dir = os.path.dirname(os.path.abspath(__file__))
 # model_file_path = os.path.join(current_dir, '../models/text_classification_pipeline.pkl')
-model_file_path = os.path.join(current_dir, '../models/tfidf_text_classification_pipeline.pkl')
+# model_file_path = os.path.join(current_dir, '../models/tfidf_text_classification_pipeline.pkl')
+model_file_path = './models/tfidf_text_classification_pipeline.pkl'
+
 loaded_pipeline = joblib.load(model_file_path)
+
+st.write(model_file_path)
 
 st.title("Классификация отзывов о фильмах по шкале Good-Neutral-Bad")
 new_text = st.text_input("Введите свой отзыв для классификации:")
@@ -117,7 +121,7 @@ with st.sidebar:
 if new_text:
     # Определяем класс и измеряем время предсказания
     start_time = time()
-    predicted_class = loaded_pipeline.predict(new_text)
+    predicted_class = loaded_pipeline.predict([new_text])
     end_time = time()
 
     # Вывод результатов классификации и времени предсказания
