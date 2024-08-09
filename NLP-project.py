@@ -29,6 +29,7 @@ st.write(
     "a comparative table displaying the f1-macro metric for all classifiers is provided."
 )
 st.page_link('pages/page1.py', label='Модель tfidf by DmChe', icon='👀')
+st.page_link('pages/tfidf_info.py', label='Информация о модели tfidf by DmChe', icon='👀')
 
 st.subheader('2. Toxicity Detection of User Messages')
 st.write(
